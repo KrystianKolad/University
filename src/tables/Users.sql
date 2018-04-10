@@ -1,0 +1,55 @@
+USE ESOS;
+GO
+PRINT N'Creating table Users'
+CREATE TABLE USERS
+(
+  ID INT NOT NULL UNIQUE IDENTITY(1,1),
+  Login VARCHAR(100) NOT NULL,
+  Password varchar(256) NOT NULL,
+  FirstName VARCHAR(30) NOT NULL,
+  SecondName VARCHAR(30),
+  LastName VARCHAR(50) NOT NULL,
+  PESEL VARCHAR(11) NOT NULL,
+  Role_id INT NOT NULL,
+  Indeks VARCHAR(6),
+  Email VARCHAR(300),
+  PhoneNumber VARCHAR(13),
+  DateOfBirth DATE NOT NULL,
+  Score INT,
+  Created DATETIME2,
+  Updated DATETIME2,
+  PRIMARY KEY(ID)
+)
+
+GO
+
+ALTER TABLE USERS
+    ADD    FOREIGN KEY (Role_id)
+    REFERENCES ROLES(ID)
+;
+
+GO
+
+CREATE UNIQUE INDEX Users_index ON USERS (ID,FirstName, LastName, PESEL);
+GO
+
+CREATE TRIGGER UserSInsert ON Users
+FOR INSERT
+AS
+  BEGIN
+    UPDATE Users
+    SET Created = CURRENT_TIMESTAMP
+    FROM inserted
+    WHERE inserted.ID = Users.ID
+  END
+GO
+CREATE TRIGGER UserSUpdate ON Users
+FOR UPDATE
+AS
+  BEGIN
+    UPDATE Users
+    SET Updated = CURRENT_TIMESTAMP
+    FROM inserted
+    WHERE inserted.ID = Users.ID
+  END
+GO

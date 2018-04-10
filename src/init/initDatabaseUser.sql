@@ -1,0 +1,9 @@
+USE ESOS
+GO
+
+PRINT N'Creating app user'
+CREATE LOGIN EsosApp WITH PASSWORD='EsosApp123!.'
+GO
+CREATE USER EsosApp FOR LOGIN EsosApp
+GO
+PRINT N'User Created'
